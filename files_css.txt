@@ -1,3 +1,11 @@
+materials/models/cs_havana/*
+materials/models/cs_italy/*
+materials/models/de_cbble/*
+materials/models/de_chateau/*
+materials/models/de_piranesi/*
+materials/models/pi_fern/*
+materials/models/pi_shrub/*
+materials/models/pi_window/*
 materials/models/props/cs_assault/*
 materials/models/props/cs_militia/*
 materials/models/props/cs_office/*
@@ -14,7 +22,6 @@ models/props/cs_militia/*
 models/props/cs_office/*
 models/props/de_cbble/*
 models/props/de_chateau/*
-models/props/de_dust/*
 models/props/de_inferno/*
 models/props/de_nuke/*
 models/props/de_piranesi/*
