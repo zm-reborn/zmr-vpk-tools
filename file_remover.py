@@ -62,25 +62,27 @@ if __name__ == '__main__':
     vpk_generator.change_cwd(folder)
 
     # Remove excluded files
-    for exc in args.exclude:
-        files = glob.glob(exc, recursive=True)
-        for file in files:
-            remove_file(file, args.dry)
+    if args.exclude:
+        for exc in args.exclude:
+            files = glob.glob(exc, recursive=True)
+            for file in files:
+                remove_file(file, args.dry)
 
     # Remove all files not on the included list.
-    for root, dirs, files in os.walk('.'):
-        if len(files) <= 0:
-            continue
-        for index, file in enumerate(files):
-            files[index] = os.path.join(root[2:], file)
+    if args.include:
+        for root, dirs, files in os.walk('.'):
+            if len(files) <= 0:
+                continue
+            for index, file in enumerate(files):
+                files[index] = os.path.join(root[2:], file)
 
-        valid_files = []
-        for inc in args.include:
-            matches = fnmatch.filter(files, inc)
-            # All the matches not in the list already.
-            new_matches = [x for x in matches if x not in valid_files]
-            valid_files = valid_files + new_matches
+            valid_files = []
+            for inc in args.include:
+                matches = fnmatch.filter(files, inc)
+                # All the matches not in the list already.
+                new_matches = [x for x in matches if x not in valid_files]
+                valid_files = valid_files + new_matches
 
-        files_remove = [x for x in files if x not in valid_files]
-        for file in files_remove:
-            remove_file(file, args.dry)
+            files_remove = [x for x in files if x not in valid_files]
+            for file in files_remove:
+                remove_file(file, args.dry)

@@ -83,6 +83,12 @@ if __name__ == '__main__':
                 for exc in args.exclude:
                     for match in fnmatch.filter(newfiles, exc):
                         newfiles.remove(match)
+                # Don't add directories
+                for file in newfiles[:]:
+                    if not os.path.isfile(file) or os.path.isdir(file):
+                        # print(file, 'is a directory!')
+                        newfiles.remove(file)
+                print(newfiles[0])
                 if len(newfiles):
                     # Add line breaks for the file.
                     if not firstline:

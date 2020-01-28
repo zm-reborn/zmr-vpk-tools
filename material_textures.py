@@ -3,14 +3,19 @@
 
 import argparse
 import os
+import re
 import sys
+
+import vpk_generator
 
 
 def get_mat_paths(mats, lowercase=False):
     ret = []
     for p in mats['paths']:
         for tex in mats['textures']:
-            s = os.path.join(p, tex)
+            s = os.path.join(
+                'materials',
+                os.path.join(p, tex))
             if lowercase:
                 s = s.lower()
             ret.append(s)
@@ -79,15 +84,15 @@ def get_mdl_data(file):
 
 def create_argparser():
     parser = argparse.ArgumentParser(
-        description="Get model's material and texture info.",
+        description="Get material's texture paths.",
         fromfile_prefix_chars='@')
     parser.add_argument(
-        'mdls',
+        'mats',
         nargs='+',
         help="""List of models.""")
     parser.add_argument(
         '--output', '-o',
-        default='mats.txt',
+        default='textures.txt',
         help="""Output file. mats.txt by default.""")
     parser.add_argument(
         '--dir', '-d',
@@ -106,15 +111,44 @@ if __name__ == '__main__':
     parser = create_argparser()
     args = parser.parse_args()
 
+    cwd = os.getcwd()
+
+    vpk_generator.change_cwd(args.dir)
+    
+    textures = []
+    for mat in args.mats:
+        try:
+            with open(os.path.join('materials', mat + '.vmt'), 'r') as fp:
+                data = fp.read()
+                found_textures = re.findall(
+                    r'^(?:\t| ){0,}(?!\/\/.{0,})"?(?:\$(?:basetexture|envmapmask|bumpmap|phongexponenttexture|lightwarptexture))"?(?:\t| ){0,}"?([^"]+)',
+                    data,
+                    flags=re.MULTILINE | re.IGNORECASE)
+
+                new_textures = []
+
+                # Check for duplicates
+                for tex in found_textures:
+                    if tex not in textures:
+                        new_textures.append(tex)
+
+                # Check if the file exists.
+                for tex in new_textures[:]:
+                    fullpath = os.path.join('materials', tex + '.vtf')
+                    if not os.path.exists(fullpath):
+                        print(
+                            'Texture',
+                            fullpath,
+                            'does not exist! (Material: %s)' % mat)
+                        new_textures.remove(tex)
+
+                textures = textures + new_textures
+        except IOError:
+            print('Could not find material', mat)
+
+    # Write them to file.
+    vpk_generator.change_cwd(cwd)
+
     with open(args.output, 'w') as fp:
-        os.chdir(args.dir)
-        firstline = True
-        for mdlpath in args.mdls:
-            if not firstline:
-                fp.write('\n')
-            firstline = False
-            fp.write(
-                '\n'.join(
-                    get_mat_paths(
-                        get_mdl_data(mdlpath),
-                        args.lowercase)))
+        fp.write('\n'.join(textures))
+
