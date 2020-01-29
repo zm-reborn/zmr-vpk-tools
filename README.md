@@ -28,4 +28,4 @@ To exclude all .vmt and .phy files, or load the list from a file.
 
 ## Building ZMR VPKs:
 - Place the content you want to be packed somewhere.
-- Configure and run `zmr/assets_css.bat` **Modify `VPK_EXE` & `CONTENT_DIR` variables in these scripts!**
+- Configure and run `assets_css.bat` and `assets_ep2.bat` **Modify `VPK_EXE` & `CONTENT_DIR` variables in these scripts!**
