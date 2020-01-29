@@ -1,0 +1,15 @@
+materials/concrete/*
+materials/metal/*
+materials/models/props_explosive/*
+materials/models/props_foliage/*
+materials/models/props_forest/*
+materials/models/props_silo/*
+materials/models/props_trainstation/*
+materials/nature/*
+materials/stone/*
+materials/wood/*
+models/props_explosive/*
+models/props_foliage/*
+models/props_forest/*
+models/props_silo/*
+models/props_trainstation/*
