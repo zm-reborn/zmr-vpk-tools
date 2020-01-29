@@ -129,6 +129,8 @@ if __name__ == '__main__':
 
                 # Check for duplicates
                 for tex in found_textures:
+                    if args.lowercase:
+                        tex = tex.lower()
                     if tex not in textures:
                         new_textures.append(tex)
 
